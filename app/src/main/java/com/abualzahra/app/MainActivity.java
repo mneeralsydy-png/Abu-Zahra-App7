@@ -1,88 +1,52 @@
 package com.abualzahra.app;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    EditText etPhoneNumber;
-    TextView tvBalance;
-    DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        etPhoneNumber = findViewById(R.id.etPhoneNumber);
-        tvBalance = findViewById(R.id.tvBalance);
+        // تحميل الصفحة الافتراضية (لوحة المفاتيح)
+        loadFragment(new DialerFragment());
+    }
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(uid);
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            item -> {
+                Fragment selectedFragment = null;
+                int id = item.getItemId();
 
-        // تحميل الرصيد
-        userRef.child("balance").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    double bal = snapshot.getValue(Double.class);
-                    tvBalance.setText("الرصيد: $" + String.format("%.2f", bal));
+                if (id == R.id.nav_dialer) {
+                    selectedFragment = new DialerFragment();
+                } else if (id == R.id.nav_logs) {
+                    selectedFragment = new LogsFragment(); // تحتاج لإنشائه
+                } else if (id == R.id.nav_contacts) {
+                    selectedFragment = new ContactsFragment(); // تحتاج لإنشائه
+                } else if (id == R.id.nav_msgs) {
+                    selectedFragment = new MessagesFragment(); // تحتاج لإنشائه
+                } else if (id == R.id.nav_more) {
+                    selectedFragment = new MoreFragment(); // تحتاج لإنشائه
                 }
-            }
-            @Override public void onCancelled(@NonNull DatabaseError error) {}
-        });
 
-        // طلب الأذونات
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 101);
-        }
+                if (selectedFragment != null) {
+                    loadFragment(selectedFragment);
+                }
+                return true;
+            };
 
-        findViewById(R.id.btnCall).setOnClickListener(v -> startCall());
-        findViewById(R.id.btnDelete).setOnClickListener(v -> {
-            String text = etPhoneNumber.getText().toString();
-            if (text.length() > 0) {
-                etPhoneNumber.setText(text.substring(0, text.length() - 1));
-                etPhoneNumber.setSelection(etPhoneNumber.getText().length());
-            }
-        });
-    }
-
-    public void onDialClick(View view) {
-        android.widget.Button button = (android.widget.Button) view;
-        String current = etPhoneNumber.getText().toString() + button.getText().toString();
-        etPhoneNumber.setText(current);
-        etPhoneNumber.setSelection(current.length());
-    }
-
-    private void startCall() {
-        String number = etPhoneNumber.getText().toString().trim();
-        if (number.isEmpty()) {
-            Toast.makeText(this, "أدخل رقماً", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        Intent intent = new Intent(this, CallActivity.class);
-        intent.putExtra("NUMBER", number);
-        startActivity(intent);
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 }
