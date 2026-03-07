@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="3"
+    android:alignmentMode="alignMargins"
+    android:padding="20dp">
+
+    <!-- بطاقة شحن الرصيد -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="15dp">
+            
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_add"
+                android:backgroundTint="#FF9800"
+                android:background="@drawable/bg_circle_white"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="إعادة الشحن"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- بطاقة التعرفة -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnWeight="1"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="15dp">
+            
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_search"
+                android:backgroundTint="#9C27B0"
+                android:background="@drawable/bg_circle_white"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="التعرفة"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- أضف المزيد من البطاقات بنفس الطريقة للتقارير، الحساب، إلخ -->
+    
+</GridLayout>
