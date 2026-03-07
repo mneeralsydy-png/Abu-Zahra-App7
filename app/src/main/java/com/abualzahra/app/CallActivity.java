@@ -14,8 +14,6 @@ import com.twilio.voice.Voice;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,9 +22,8 @@ import retrofit2.http.Query;
 
 public class CallActivity extends AppCompatActivity {
     TextView tvStatus, tvNumber;
-    Call activeCall;
+    Call activeCall; // هذا يخص Twilio
     
-    // تم وضع الرابط الخاص بك هنا
     String SERVER_URL = "https://9424e054-f128-42e3-bff2-a475eb231a04-00-3fw9va4yton87.sisko.replit.dev/";
     String identity;
 
@@ -53,9 +50,11 @@ public class CallActivity extends AppCompatActivity {
                 .build();
 
         TokenService service = retrofit.create(TokenService.class);
-        service.getToken(identity).enqueue(new Callback<TokenResponse>() {
+        
+        // نستخدم الاسم الكامل retrofit2.Call لتفادي التلبيس مع Twilio Call
+        service.getToken(identity).enqueue(new retrofit2.Callback<TokenResponse>() {
             @Override
-            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+            public void onResponse(retrofit2.Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String token = response.body().token;
                     makeCall(token, targetNumber);
@@ -65,7 +64,7 @@ public class CallActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<TokenResponse> call, Throwable t) {
+            public void onFailure(retrofit2.Call<TokenResponse> call, Throwable t) {
                 tvStatus.setText("خطأ في الشبكة: " + t.getMessage());
             }
         });
@@ -79,6 +78,7 @@ public class CallActivity extends AppCompatActivity {
                 .params(params)
                 .build();
 
+        // هذا يخص Twilio
         activeCall = Voice.connect(CallActivity.this, options, new Call.Listener() {
             @Override
             public void onConnected(Call call) {
@@ -107,8 +107,9 @@ public class CallActivity extends AppCompatActivity {
 
     // Interface for Retrofit
     public interface TokenService {
+        // نستخدم الاسم الكامل retrofit2.Call هنا أيضاً
         @GET("token")
-        Call<TokenResponse> getToken(@Query("identity") String identity);
+        retrofit2.Call<TokenResponse> getToken(@Query("identity") String identity);
     }
 
     public class TokenResponse {
