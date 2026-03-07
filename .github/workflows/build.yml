@@ -18,40 +18,32 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # --- خطوة جديد: تثبيت Gradle ---
       - name: Setup Gradle
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
           sudo unzip -q /tmp/gradle.zip -d /opt
           sudo ln -s /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
 
-      # --- خطوة جديد: حفظ واسترجاع المفتاح تلقائياً ---
+      # --- خطوة التخزين المؤقت للحفاظ على المفتاح ثابت ---
       - name: Cache Keystore
         id: cache-keystore
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.android/debug.keystore
-            app/abuzahra.jks
+          path: app/abuzahra.jks
           key: ${{ runner.os }}-keystore-v1
 
+      # --- توليد المفتاح إذا لم يكن موجوداً ---
       - name: Generate Keystore if missing
         if: steps.cache-keystore.outputs.cache-hit != 'true'
         run: |
           echo "Generating new Keystore..."
           keytool -genkeypair -v -alias abuzahra -keyalg RSA -keysize 2048 -validity 10000 -keystore app/abuzahra.jks -storepass 123456 -keypass 123456 -dname "CN=AbuZahra, OU=Dev, O=AbuZahra, L=Sanaa, ST=Sanaa, C=YE"
-          cp app/abuzahra.jks ~/.android/debug.keystore
 
-      - name: Prepare Keystore for build
-        run: |
-          mkdir -p ~/.android
-          if [ -f app/abuzahra.jks ]; then cp app/abuzahra.jks ~/.android/debug.keystore; fi
-
-      # --- طباعة بصمة SHA-1 لتضعها في Firebase ---
+      # --- طباعة البصمة لتستخدمها في Firebase ---
       - name: Print SHA-1 Key
         run: |
           echo "=========================================="
-          echo "انسخ هذا الكود وضعه في Firebase (Project Settings -> Your Apps -> Add Fingerprint):"
+          echo "انسخ كود SHA1 التالي وضعه في Firebase Console:"
           keytool -list -v -keystore app/abuzahra.jks -storepass 123456 -alias abuzahra | grep SHA1
           echo "=========================================="
 
