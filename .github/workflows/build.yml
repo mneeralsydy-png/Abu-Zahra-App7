@@ -18,20 +18,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # --- خطوة جديد: توليد ملفات الـ Wrapper تلقائياً ---
-      - name: Setup Gradle Wrapper
+      # --- خطوة جديدة: تثبيت Gradle رسمياً (بدلاً من محاولة التوليد) ---
+      - name: Setup Gradle
         run: |
-          if [ ! -f "gradlew" ]; then
-            echo "Gradle wrapper missing. Generating..."
-            wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O gradle.zip
-            unzip -q gradle.zip
-            ./gradle-8.5/bin/gradle wrapper --gradle-version 8.5
-            rm -rf gradle-8.5 gradle.zip
-          fi
-          chmod +x gradlew
+          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip -O /tmp/gradle.zip
+          sudo unzip -q /tmp/gradle.zip -d /opt
+          sudo ln -s /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
+
+      - name: Grant execute permission
+        run: chmod +x gradlew || true
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
