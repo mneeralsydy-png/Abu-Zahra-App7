@@ -1,5 +1,6 @@
 package com.abualzahra.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +30,22 @@ public class DialerFragment extends Fragment {
             }
         });
         
-        // زر الاتصال
         view.findViewById(R.id.btnCall).setOnClickListener(v -> {
-            // ابدأ المكالمة هنا
+            if (!currentNumber.isEmpty()) {
+                Intent intent = new Intent(getActivity(), CallActivity.class);
+                intent.putExtra("NUMBER", currentNumber);
+                startActivity(intent);
+            }
         });
 
         return view;
     }
 
-    // دالة استدعاء الأزرار (توضع في خاصية onClick الزر في XML)
     public void onDialClick(View view) {
         Button button = (Button) view;
         currentNumber += button.getText().toString();
-        tvNumber.setText(currentNumber);
+        if (tvNumber != null) {
+            tvNumber.setText(currentNumber);
+        }
     }
 }
