@@ -44,5 +44,14 @@
         android:textSize="18sp"
         android:backgroundTint="#FFFFFF"
         android:textColor="#0078D7"
-        android:padding="15dp"/>
+        android:padding="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <!-- زر تسجيل الدخول عبر جوجل -->
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btnGoogleSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"/>
+
 </LinearLayout>
