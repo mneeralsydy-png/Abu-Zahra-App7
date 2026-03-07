@@ -9,9 +9,5 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+// تم حذف كتلة allprojects لأنها موجودة في settings.gradle
+// وهذا هو سبب الخطأ السابق
