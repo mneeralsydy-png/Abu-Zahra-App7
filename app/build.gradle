@@ -46,3 +46,25 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.android.gms:play-services-auth:21.0.0' 
 }
+ 
+
+    signingConfigs {
+        release {
+            storeFile file('abuzahra.jks')
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: "123456"
+            keyAlias "abuzahra"
+            keyPassword System.getenv("KEYSTORE_PASSWORD") ?: "123456"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+}
