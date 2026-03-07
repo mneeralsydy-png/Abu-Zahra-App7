@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- الألوان الأساسية التي يطلبها النظام (هام جداً) -->
+    <color name="colorPrimary">#0078D7</color>
+    <color name="colorPrimaryDark">#005A9E</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+    <!-- الألوان المخصصة المستخدمة في التصميم -->
     <color name="primary_azure">#0078D7</color>
     <color name="primary_dark">#005A9E</color>
     <color name="bg_color">#f0f2f5</color>
