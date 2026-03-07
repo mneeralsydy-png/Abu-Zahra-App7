@@ -1,86 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F0F2F5">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvBalance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="الرصيد: $0.00"
-        android:textSize="20sp"
-        android:textColor="#0078D7"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:padding="15dp"
-        android:textStyle="bold"/>
-
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvBalance"
-        android:layout_margin="20dp"
-        android:hint="أدخل الرقم"
-        android:textSize="28sp"
-        android:textAlignment="center"
-        android:inputType="phone"
-        android:background="@drawable/rounded_edittext"
-        android:padding="20dp"
-        android:textColor="#0078D7"
-        android:textStyle="bold"/>
-
-    <GridLayout
-        android:id="@+id/keypad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:columnCount="3"
-        android:alignmentMode="alignMargins"
-        android:padding="10dp">
-
-        <Button android:text="1" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="2" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="3" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="4" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="5" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="6" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="7" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="8" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="9" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="*" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="0" android:onClick="onDialClick" style="@style/KeypadButton"/>
-        <Button android:text="#" android:onClick="onDialClick" style="@style/KeypadButton"/>
-    </GridLayout>
-
+    <!-- الهيدر (الشريط العلوي) -->
     <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/keypad"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:background="@color/primary_azure"
+        android:padding="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true">
 
-        <ImageButton
-            android:id="@+id/btnCall"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@android:drawable/ic_menu_call"
-            android:background="@drawable/circle_button"
-            android:backgroundTint="#0078D7"
-            android:tint="#FFFFFF"
-            android:scaleType="center"
-            android:layout_margin="15dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/bg_circle_white"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  أبو الزهراء"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@android:drawable/ic_input_delete"
-            android:background="@drawable/circle_button"
-            android:backgroundTint="#A80000"
-            android:tint="#FFFFFF"
-            android:scaleType="center"
-            android:layout_margin="15dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+            
+            <TextView
+                android:id="@+id/tvBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:background="@drawable/bg_button_rounded"
+                android:backgroundTint="#20FFFFFF"
+                android:padding="6dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- محتوى الصفحات (Fragment Container) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header"
+        android:layout_above="@id/bottom_navigation"
+        android:background="@color/bg_color"/>
+
+    <!-- القائمة السفلية -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/primary_azure"
+        app:itemTextColor="@color/primary_azure"/>
+
 </RelativeLayout>
