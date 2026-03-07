@@ -59,14 +59,13 @@
         android:padding="15dp"/>
 
     <!-- زر جوجل -->
-    <Button
-        android:id="@+id/btnGoogle"
+        <Button
+        android:id="@+id/btnGoogleSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="تسجيل عبر جوجل"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_button_rounded"
         android:textColor="#555555"
-        android:drawableStart="@android:drawable/ic_menu_add"
         android:padding="15dp"/>
 </LinearLayout>
