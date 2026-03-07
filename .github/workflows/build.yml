@@ -24,7 +24,7 @@ jobs:
           sudo unzip -q /tmp/gradle.zip -d /opt
           sudo ln -s /opt/gradle-8.5/bin/gradle /usr/local/bin/gradle
 
-      # --- خطوة التخزين المؤقت للحفاظ على المفتاح ثابت ---
+      # --- تخزين واسترجاع المفتاح ---
       - name: Cache Keystore
         id: cache-keystore
         uses: actions/cache@v4
@@ -32,18 +32,16 @@ jobs:
           path: app/abuzahra.jks
           key: ${{ runner.os }}-keystore-v1
 
-      # --- توليد المفتاح إذا لم يكن موجوداً ---
       - name: Generate Keystore if missing
         if: steps.cache-keystore.outputs.cache-hit != 'true'
         run: |
           echo "Generating new Keystore..."
           keytool -genkeypair -v -alias abuzahra -keyalg RSA -keysize 2048 -validity 10000 -keystore app/abuzahra.jks -storepass 123456 -keypass 123456 -dname "CN=AbuZahra, OU=Dev, O=AbuZahra, L=Sanaa, ST=Sanaa, C=YE"
 
-      # --- طباعة البصمة لتستخدمها في Firebase ---
       - name: Print SHA-1 Key
         run: |
           echo "=========================================="
-          echo "انسخ كود SHA1 التالي وضعه في Firebase Console:"
+          echo "انسخ هذا الكود وضعه في Firebase:"
           keytool -list -v -keystore app/abuzahra.jks -storepass 123456 -alias abuzahra | grep SHA1
           echo "=========================================="
 
