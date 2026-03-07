@@ -1,3 +1,4 @@
+
 package com.abualzahra.app;
 
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import retrofit2.http.Query;
 
 public class CallActivity extends AppCompatActivity {
     TextView tvStatus, tvNumber;
-    Call activeCall; // هذا يخص Twilio
+    Call activeCall;
     
     String SERVER_URL = "https://9424e054-f128-42e3-bff2-a475eb231a04-00-3fw9va4yton87.sisko.replit.dev/";
     String identity;
@@ -50,8 +51,6 @@ public class CallActivity extends AppCompatActivity {
                 .build();
 
         TokenService service = retrofit.create(TokenService.class);
-        
-        // نستخدم الاسم الكامل retrofit2.Call لتفادي التلبيس مع Twilio Call
         service.getToken(identity).enqueue(new retrofit2.Callback<TokenResponse>() {
             @Override
             public void onResponse(retrofit2.Call<TokenResponse> call, Response<TokenResponse> response) {
@@ -60,7 +59,6 @@ public class CallActivity extends AppCompatActivity {
                     makeCall(token, targetNumber);
                 } else {
                     tvStatus.setText("فشل الاتصال بالخادم");
-                    Toast.makeText(CallActivity.this, "تأكد من أن الخادم يعمل ويدعم /token", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -78,7 +76,6 @@ public class CallActivity extends AppCompatActivity {
                 .params(params)
                 .build();
 
-        // هذا يخص Twilio
         activeCall = Voice.connect(CallActivity.this, options, new Call.Listener() {
             @Override
             public void onConnected(Call call) {
@@ -95,6 +92,22 @@ public class CallActivity extends AppCompatActivity {
             public void onConnectFailure(Call call, CallException error) {
                 tvStatus.setText("فشل الاتصال: " + error.getMessage());
             }
+
+            @Override
+            public void onRinging(Call call) {
+                tvStatus.setText("يرن...");
+            }
+
+            // --- الدوال المضافة لحل الخطأ ---
+            @Override
+            public void onReconnecting(Call call, CallException error) {
+                tvStatus.setText("جاري إعادة الاتصال...");
+            }
+
+            @Override
+            public void onReconnected(Call call) {
+                tvStatus.setText("متصل");
+            }
         });
     }
 
@@ -105,9 +118,7 @@ public class CallActivity extends AppCompatActivity {
         finish();
     }
 
-    // Interface for Retrofit
     public interface TokenService {
-        // نستخدم الاسم الكامل retrofit2.Call هنا أيضاً
         @GET("token")
         retrofit2.Call<TokenResponse> getToken(@Query("identity") String identity);
     }
