@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- الألوان الأساسية -->
     <color name="colorPrimary">#0078D7</color>
     <color name="colorPrimaryDark">#005A9E</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    
+    <!-- ألوان الخلفيات والنصوص -->
     <color name="bg_color">#f0f2f5</color>
     <color name="text_dark">#333333</color>
+    <color name="text_gray">#888888</color>
+    <color name="text_light">#CCCCCC</color>
+    
+    <!-- ألوان الحالة -->
     <color name="green">#107C10</color>
     <color name="red">#A80000</color>
+    
+    <!-- ألوان التدرج -->
     <color name="gradient_start">#004e92</color>
     <color name="gradient_end">#000428</color>
 </resources>
