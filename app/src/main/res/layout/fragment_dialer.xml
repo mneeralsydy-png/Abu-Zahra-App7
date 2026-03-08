@@ -25,34 +25,6 @@
             android:gravity="center"
             android:hint="أدخل الرقم"
             android:textColorHint="#CCCCCC"/>
-
-        <!-- أزرار التبديل (Toggles) -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="15dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginEnd="20dp">
-                <TextView android:text="تسجيل" android:textSize="12sp" android:textColor="#666"/>
-                <Switch android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <TextView android:text="إخفاء الرقم" android:textSize="12sp" android:textColor="#666"/>
-                <Switch android:id="@+id/switchHideId" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
     <!-- لوحة المفاتيح -->
@@ -64,18 +36,55 @@
         android:alignmentMode="alignMargins"
         android:padding="20dp">
 
-        <Button android:text="1" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="2" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="3" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="4" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="5" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="6" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="7" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="8" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="9" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="*" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="0" style="@style/KeypadButton" android:onClick="onDialClick"/>
-        <Button android:text="#" style="@style/KeypadButton" android:onClick="onDialClick"/>
+        <!-- تم إضافة الخصائص layout_width و layout_columnWeight هنا مباشرة -->
+        
+        <Button android:text="1" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="2" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="3" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="4" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="5" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="6" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="7" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="8" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="9" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="*" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="0" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
+        
+        <Button android:text="#" android:onClick="onDialClick"
+            android:layout_width="0dp" android:layout_height="70dp" android:layout_columnWeight="1" android:layout_margin="8dp"
+            style="@style/KeypadButton"/>
     </GridLayout>
 
     <!-- أزرار الإجراءات -->
