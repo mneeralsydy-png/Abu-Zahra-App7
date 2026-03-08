@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     // رابط الـ Base URL
-    private String BASE_URL = "https://9424e054-f128-42e3-bff2-a475eb231a04-00-3fw9va4yton87.sisko.replit.dev/";
+    private String BASE_URL = "https://7e952225-bff8-4169-a824-94789c455e25-00-1yw8r6dfyrdr5.pike.replit.dev	/";
     
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath = null;
