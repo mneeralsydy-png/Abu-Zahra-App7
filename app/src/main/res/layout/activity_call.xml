@@ -77,7 +77,7 @@
             android:layout_height="60dp"
             android:background="@drawable/bg_key_circle"
             android:backgroundTint="#20FFFFFF"
-            android:src="@android:drawable/ic_volume_bigger_adaptive"
+            android:src="@android:drawable/sym_action_speakerphone"
             android:tint="@color/white"
             android:layout_margin="15dp"/>
     </LinearLayout>
