@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- الشريط العلوي (Header) -->
+    <!-- الشريط العلوي -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             <View
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:background="@drawable/bg_key_circle"/> <!-- النقطة الخضراء -->
+                android:background="@drawable/bg_key_circle"/>
             
             <TextView
                 android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- محتوى الصفحات -->
+    <!-- محتوى الصفحات (لاحظ استخدام @id/bottom_nav هنا) -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -61,9 +61,9 @@
         android:layout_above="@id/bottom_nav"
         android:background="@color/bg_color"/>
 
-    <!-- القائمة السفلية -->
+    <!-- القائمة السفلية (لاحظ الاسم هنا هو bottom_nav) -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
