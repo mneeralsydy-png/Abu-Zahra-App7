@@ -184,7 +184,7 @@ public class CallActivity extends AppCompatActivity {
         if (audioManager != null) {
             boolean isSpeakerOn = audioManager.getMode() == AudioManager.MODE_IN_CALL; 
             // التبديل بين السماعة ومكبر الصوت
-            if (audioManager.getSpeakerphoneOn()) {
+                if (audioManager.isSpeakerphoneOn()) { 
                 audioManager.setSpeakerphoneOn(false);
                 btnSpeaker.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.white));
                 Toast.makeText(this, "السماعة العادية", Toast.LENGTH_SHORT).show();
