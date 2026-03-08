@@ -1,12 +1,17 @@
-<style name="KeypadButton" parent="Widget.MaterialComponents.Button">
-    <item name="android:layout_width">0dp</item>
-    <item name="android:layout_height">70dp</item>
-    <item name="android:layout_columnWeight">1</item>
-    <item name="android:background">@drawable/bg_key_circle</item>
-    <item name="android:textSize">24sp</item>
-    <item name="android:textColor">@color/colorPrimary</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:insetTop">0dp</item>
-    <item name="android:insetBottom">0dp</item>
-    <item name="android:layout_margin">8dp</item>
-</style>
+<resources>
+    <style name="Theme.AbuAlZahra" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- نمط الأزرار: يحتوي فقط على التنسيقات المرئية -->
+    <style name="KeypadButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/bg_key_circle</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+</resources>
