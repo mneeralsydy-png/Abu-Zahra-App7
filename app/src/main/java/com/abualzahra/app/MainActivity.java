@@ -1,226 +1,88 @@
 package com.abualzahra.app;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.View;
-import android.view.WindowManager;
-import android.webkit.PermissionRequest;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.io.File;
-import java.io.IOException;      // تمت الإضافة
-import java.io.InputStream;      // تمت الإضافة
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public class MainActivity extends AppCompatActivity {
-
-    private WebView webView;
-    // رابط الـ Base URL
-    private String BASE_URL = "https://7e952225-bff8-4169-a824-94789c455e25-00-1yw8r6dfyrdr5.pike.replit.dev	/";
-    
-    private ValueCallback<Uri[]> mFilePathCallback;
-    private String mCameraPhotoPath = null;
-    private static final int INPUT_FILE_REQUEST_CODE = 1;
-    private static final int PERMISSION_REQUEST_CODE = 100;
+public class LoginActivity extends AppCompatActivity {
+    FirebaseAuth mAuth;
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        webView = findViewById(R.id.webView);
-        
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setDatabaseEnabled(true);
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowContentAccess(true);
-        webSettings.setMediaPlaybackRequiresUserGesture(false);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setSupportMultipleWindows(true);
-        
-        String userAgent = webSettings.getUserAgentString();
-        webSettings.setUserAgentString(userAgent + " AbuAlZahraNativeApp/1.0");
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null){
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
 
-        webView.setWebChromeClient(new MyWebChromeClient());
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith("tel:") || url.startsWith("whatsapp:") || url.startsWith("intent:")) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
-            }
+        // تكوين تسجيل الدخول بجوجل
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        EditText etEmail = findViewById(R.id.etEmail);
+        EditText etPass = findViewById(R.id.etPassword);
+        Button btnLogin = findViewById(R.id.btnLogin);
+        Button btnGoogle = findViewById(R.id.btnGoogle);
+
+        btnLogin.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            String pass = etPass.getText().toString().trim();
+            if(email.isEmpty() || pass.isEmpty()) return;
+            mAuth.signInWithEmailAndPassword(email, pass)
+                    .addOnSuccessListener(authResult -> updateUI())
+                    .addOnFailureListener(e -> Toast.makeText(this, "خطأ: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
 
-        if (checkPermissions()) {
-            loadLocalHtml();
-        } else {
-            requestPermissions();
-        }
-    }
-
-    private void loadLocalHtml() {
-        try {
-            InputStream is = getAssets().open("index.html");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String htmlContent = new String(buffer, "UTF-8");
-
-            webView.loadDataWithBaseURL(BASE_URL, htmlContent, "text/html", "UTF-8", null);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "خطأ في تحميل ملف التطبيق", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private boolean checkPermissions() {
-        int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-        int resultCam = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        int resultContact = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
-        return resultMic == PackageManager.PERMISSION_GRANTED && 
-               resultCam == PackageManager.PERMISSION_GRANTED &&
-               resultContact == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(this, new String[]{
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        }, PERMISSION_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        loadLocalHtml();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private class MyWebChromeClient extends WebChromeClient {
-        
-        @Override
-        public void onPermissionRequest(final PermissionRequest request) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                request.grant(request.getResources());
-            }
-        }
-
-        @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-            if (mFilePathCallback != null) {
-                mFilePathCallback.onReceiveValue(null);
-            }
-            mFilePathCallback = filePathCallback;
-
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                    takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                if (photoFile != null) {
-                    mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                            FileProvider.getUriForFile(MainActivity.this,
-                                    getPackageName() + ".fileprovider",
-                                    photoFile));
-                } else {
-                    takePictureIntent = null;
-                }
-            }
-
-            Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            contentSelectionIntent.setType("image/*");
-
-            Intent[] intentArray;
-            if (takePictureIntent != null) {
-                intentArray = new Intent[]{takePictureIntent};
-            } else {
-                intentArray = new Intent[0];
-            }
-
-            Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-            chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-            chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-
-            startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
-            return true;
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(imageFileName, ".jpg", storageDir);
+        btnGoogle.setOnClickListener(v -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-
-        Uri[] results = null;
-        if (resultCode == RESULT_OK) {
-            if (data == null) {
-                if (mCameraPhotoPath != null) {
-                    results = new Uri[]{Uri.parse(mCameraPhotoPath)};
-                }
-            } else {
-                String dataString = data.getDataString();
-                if (dataString != null) {
-                    results = new Uri[]{Uri.parse(dataString)};
-                }
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                Toast.makeText(this, "فشل تسجيل جوجل: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
 
-        mFilePathCallback.onReceiveValue(results);
-        mFilePathCallback = null;
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnSuccessListener(authResult -> updateUI())
+                .addOnFailureListener(e -> Toast.makeText(this, "فشل المصادقة", Toast.LENGTH_SHORT).show());
+    }
+
+    private void updateUI() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }
