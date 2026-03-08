@@ -1,11 +1,19 @@
 <resources>
+    <!-- الثيم الرئيسي للتطبيق -->
     <style name="Theme.AbuAlZahra" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
-    <!-- نمط الأزرار: يحتوي فقط على التنسيقات المرئية -->
+    <!-- ثيم شاشة تسجيل الدخول (الذي كان مفقوداً وسبب الخطأ) -->
+    <style name="Theme.AbuAlZahra.Login" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- جعل خلفية الشاشة زرقاء كما في التصميم -->
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <!-- نمط أزرار لوحة المفاتيح -->
     <style name="KeypadButton" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/bg_key_circle</item>
         <item name="android:textSize">24sp</item>
