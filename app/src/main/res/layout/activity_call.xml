@@ -69,16 +69,19 @@
             android:backgroundTint="#20FFFFFF"
             android:src="@android:drawable/ic_btn_speak_now"
             android:tint="@color/white"
+            android:scaleType="center"
             android:layout_margin="15dp"/>
 
+        <!-- تم تغيير الأيقونة هنا ليستخدم الملف الذي أنشأناه -->
         <ImageButton
             android:id="@+id/btnSpeaker"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/bg_key_circle"
             android:backgroundTint="#20FFFFFF"
-            android:src="@android:drawable/sym_action_speakerphone"
+            android:src="@drawable/ic_speakerphone"
             android:tint="@color/white"
+            android:scaleType="center"
             android:layout_margin="15dp"/>
     </LinearLayout>
 
